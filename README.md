@@ -38,7 +38,7 @@ Have questions or want to learn more about **NoCaigas SMS**? Feel free to reach 
 
 - **Name**: Endy Bermudez Rodriguez  
 - **Email**: [endy.dev@gmail.com](mailto:endy.dev@gmail.com)  
-- **Made with ❤️ in Colombia**
+- **Hecho en Colombia con ❤️**
 
 ---
 
