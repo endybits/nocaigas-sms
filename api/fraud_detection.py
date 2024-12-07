@@ -18,14 +18,19 @@ def detect_fraud(sms_content, sender, message_id, rules = rules):
 
     risk_score = 0
     reasons = []
+    extracted_urls = []
 
     sms_content = sms_content.lower()
 
     for rule in rules:
         if rule["type"] == "regex":
-            if re.search(rule["value"], sms_content):
+            matches = re.findall(rule["value"], sms_content)
+            if matches:
                 risk_score += 0.4
-                reasons.append(f"Url Sospechosa: {rule['value']}")
+                for match in matches:
+                    if "://" in rule["value"] or rule["value"] == r"https?://\S+":
+                        extracted_urls.append(match)
+                    reasons.append(f"Url Sospechosa: {match}")
         elif rule["value"] in sms_content and rule["type"] == "keyword":
             risk_score += 0.3
             reasons.append(f"Keyword: {rule['value']}")
