@@ -2,7 +2,13 @@ import datetime
 
 from fastapi import FastAPI
 
-from api.schemas import AnalizeMessageResponse, AnalizeMessageWithTimestamp, AnalizeMessage
+from api.schemas import (
+    AnalizeMessageResponse, 
+    AnalizeMessageWithTimestamp,
+    AnalizeMessage,
+    FeedbackMessage,
+    FeedbackResponse
+)
 
 
 # Use rout
@@ -20,8 +26,10 @@ async def analize_message(
 ) -> AnalizeMessageResponse:
     
     current_time = datetime.datetime.now().isoformat().split(".")[0] + "Z"
-    input_message["timestamp"] = current_time
-    message = AnalizeMessageWithTimestamp(**input_message)
+    
+    input_dict = input_message.model_dump()
+    input_dict["timestamp"] = current_time
+    message = AnalizeMessageWithTimestamp(**input_dict)
     print(message)
 
     response = {
@@ -29,5 +37,22 @@ async def analize_message(
         "response_message": "No Caigas, mensaje fraudulento",
         "classification": "Fraudulento",
         "reasons": ["URL Sospechosa", "Keyword: ganaste"],
+        "message_id": "12345"
     }
     return AnalizeMessageResponse(**response)
+
+
+
+
+
+# ----- FEEDBACK MECHANISM -----
+
+@app.post("/feedback", tags=["Feedback Mechanism"])
+async def feedback(
+    feedback_message: FeedbackMessage
+) -> FeedbackResponse:
+    response = {
+        "status": "success",
+        "message": "Feedback recorded. Thank you!"
+    }
+    return FeedbackResponse(**response)
